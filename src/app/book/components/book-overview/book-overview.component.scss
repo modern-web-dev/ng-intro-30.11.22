@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: row;
+}
+
+table {
+  width: 70%;
+
+  > tbody > tr {
+    cursor: pointer;
+  }
+}
+
+ba-book-details {
+  width: 30%;
+}
