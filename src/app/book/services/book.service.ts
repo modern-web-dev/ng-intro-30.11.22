@@ -1,5 +1,5 @@
 import {Book} from '../model';
-import {map, Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 
 // type FindByIdCallbackFn = (book: Book) => void;
 
@@ -62,9 +62,23 @@ export class BookService {
     //   // });
     // });
   }
+
+  search(query: string): Observable<string[]> {
+    return new Observable<string[]>(observer => {
+      setTimeout(() => {
+        observer.next([
+          `${query} ...`,
+          `${query} .......`,
+          `${query} ...........`,
+          `${query} ................`,
+        ]);
+        observer.complete();
+      }, 700);
+    });
+  }
 }
 
-const service = new BookService();
+// const service = new BookService();
 // 1. sync
 // try {
 //   const book = service.findById(123);
@@ -110,20 +124,20 @@ console.log('End');
 // }
 
 // 4. async (Observables RxJS)
-const book$ = service.findById(113)
-  .pipe(map(book => book.id));
-const subscription: Subscription = book$
-  .subscribe({
-    next(book) {
-      console.log(book);
-    },
-    error(error) {
-      console.error(error);
-    },
-    complete() {
-      console.error('Done..');
-    }
-  })
-
-subscription.unsubscribe();
+// const book$ = service.findById(113)
+//   .pipe(map(book => book.id));
+// const subscription: Subscription = book$
+//   .subscribe({
+//     next(book) {
+//       console.log(book);
+//     },
+//     error(error) {
+//       console.error(error);
+//     },
+//     complete() {
+//       console.error('Done..');
+//     }
+//   })
+//
+// subscription.unsubscribe();
 
