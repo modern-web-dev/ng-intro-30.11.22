@@ -1,40 +1,23 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Book} from '../../model';
 import {BookService} from '../../services/book.service';
-import {debounceTime, distinctUntilChanged, fromEvent, map, OperatorFunction, switchMap} from 'rxjs';
+import {Observable, Subject, takeUntil, tap} from 'rxjs';
 
 @Component({
   selector: 'ba-book-overview',
   templateUrl: './book-overview.component.html',
   styleUrls: ['./book-overview.component.scss']
 })
-export class BookOverviewComponent implements AfterViewInit {
-  @ViewChild('searchInput')
-  searchInput?: ElementRef
-
-  results: string[] = [];
-
-  // handle: number | null = null;
-
-  books: Book[];
-
+export class BookOverviewComponent implements OnDestroy{
+  readonly books$: Observable<Book[]>;
   selectedBook: Book | null = null;
+  private readonly unsubscribe = new Subject<void>();
 
   constructor(private readonly bookService: BookService) {
-    this.books = bookService.findAll();
-  }
-
-  ngAfterViewInit(): void {
-    fromEvent<Event>(this.searchInput?.nativeElement, 'input')
+    this.books$ = bookService.findAll()
       .pipe(
-        mapFromInputEventToTargetValue(),
-        debounceTime(500),
-        distinctUntilChanged(),
-        switchMap(query => this.bookService.search(query))
-      )
-      .subscribe(results => {
-        this.results = results;
-      });
+        tap(books => console.log(books))
+      );
   }
 
   selectBook(book: Book) {
@@ -46,19 +29,17 @@ export class BookOverviewComponent implements AfterViewInit {
   }
 
   updateBook(changedBook: Book) {
-    const changedBookCopy = {...changedBook};
-    this.books = this.books.map(book => book.id === changedBook.id ? changedBookCopy : book);
-    this.selectBook(changedBookCopy);
+    this.bookService.update(changedBook)
+      .pipe(
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe(changedBook => {
+        this.selectBook(changedBook);
+      });
   }
-}
 
-function mapFromInputEventToTargetValue() {
-  return map<Event, string>(event => {
-    const inputElement = event.target as HTMLInputElement;
-    return inputElement.value
-  })
-}
-
-function addTax(taxValue: number): OperatorFunction<number, number> {
-  return map(value => value + taxValue);
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
 }

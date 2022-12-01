@@ -1,10 +1,8 @@
 import {Book} from '../model';
-import {Observable} from 'rxjs';
-
-// type FindByIdCallbackFn = (book: Book) => void;
+import {BehaviorSubject, Observable} from 'rxjs';
 
 export class BookService {
-  private readonly books = [
+  private booksSubject = new BehaviorSubject<Book[]>([
     {
       id: 0,
       authors: 'Douglas Crockford',
@@ -25,20 +23,31 @@ export class BookService {
       authors: 'Vinit Nayak',
       title: 'Copying and Pasting from Stack Overflow'
     }
-  ];
+  ]);
+  private books$ = this.booksSubject.asObservable();
 
-  constructor() {
-    console.log('BookService Created...');
+  findAll(): Observable<Book[]> {
+    return this.books$;
   }
 
-  findAll(): Book[] {
-    return this.books;
+  update(book: Book): Observable<Book> {
+    return new Observable<Book>(subscriber => {
+      setTimeout(() => {
+        const changedBookCopy = {...book};
+        const currentBooks = this.booksSubject.value;
+        const newBooks = currentBooks.map(currentBook => currentBook.id === book.id ? changedBookCopy : currentBook);
+        this.booksSubject.next(newBooks);
+        subscriber.next(changedBookCopy);
+        subscriber.complete();
+      }, 1000);
+    });
   }
 
   findById(bookId: number): Observable<Book> {
     return new Observable<Book>(subscriber => {
       setTimeout(() => {
-        const book = this.books.find(book => book.id === bookId);
+        const currentBooks = this.booksSubject.value;
+        const book = currentBooks.find(book => book.id === bookId);
         if (book) {
           subscriber.next(book);
           subscriber.complete();
@@ -47,97 +56,5 @@ export class BookService {
         }
       }, 1000);
     })
-
-
-    // return fetch(`books/${bookId}`)
-    //   .then(response => response.json());
-    // return new Promise<Book>((resolve, reject) => {
-    //   // setTimeout(() => {
-    //     const book = this.books.find(book => book.id === bookId);
-    //     if (!book) {
-    //       reject(new Error(`Book with ID ${bookId} could not be found!`))
-    //     } else {
-    //       resolve(book);
-    //     }
-    //   // });
-    // });
-  }
-
-  search(query: string): Observable<string[]> {
-    return new Observable<string[]>(observer => {
-      setTimeout(() => {
-        observer.next([
-          `${query} ...`,
-          `${query} .......`,
-          `${query} ...........`,
-          `${query} ................`,
-        ]);
-        observer.complete();
-      }, 700);
-    });
   }
 }
-
-// const service = new BookService();
-// 1. sync
-// try {
-//   const book = service.findById(123);
-//   console.log(book);
-//   return book;
-// } catch (e) {
-//   console.error(e);
-//   throw e;
-// }
-// return undefined;
-
-// 2. async (callbacks)
-// service.findById(123,
-//   function (book) {
-//     console.log(book);
-//     service.findById(646, book2 => {
-//
-//     })
-//   });
-console.log('End');
-
-// 3. async (Promises)
-// service.findById(123)
-//   .then(
-//     function (book) {
-//       console.log(book);
-//     },
-//     error => {
-//       console.error(error);
-//       return Promise.reject();
-//     }
-//   )
-// console.log("End");
-
-// async function f() {
-//   try {
-//     const book = await service.findById(123);
-//     console.log(book);
-//   } catch (e) {
-//     console.error(e);
-//     throw e;
-//   }
-// }
-
-// 4. async (Observables RxJS)
-// const book$ = service.findById(113)
-//   .pipe(map(book => book.id));
-// const subscription: Subscription = book$
-//   .subscribe({
-//     next(book) {
-//       console.log(book);
-//     },
-//     error(error) {
-//       console.error(error);
-//     },
-//     complete() {
-//       console.error('Done..');
-//     }
-//   })
-//
-// subscription.unsubscribe();
-

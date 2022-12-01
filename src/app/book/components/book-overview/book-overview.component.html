@@ -1,28 +1,22 @@
-<input class="form-control-lg" #searchInput>
-<ul>
-  <li *ngFor="let msg of results">{{msg}}</li>
-</ul>
-
-
-<!--<table class="table table-striped table-primary align-self-start me-3">-->
-<!--  <thead>-->
-<!--  <tr>-->
-<!--    <th>#</th>-->
-<!--    <th>Authors</th>-->
-<!--    <th>Title</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-<!--  <tbody>-->
-<!--  <tr *ngFor="let book of books; index as i"-->
-<!--      (click)="selectBook(book)"-->
-<!--      [class.table-success]="isBookSelected(book)">-->
-<!--    <td>{{i + 1}}</td>-->
-<!--    <td>{{book.authors}}</td>-->
-<!--    <td>{{book.title}}</td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
-<!--</table>-->
-<!--<ba-book-details-->
-<!--  *ngIf="selectedBook"-->
-<!--  [book]="selectedBook"-->
-<!--  (bookChange)="updateBook($event)"></ba-book-details>-->
+<table class="table table-striped table-primary align-self-start me-3">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Authors</th>
+    <th>Title</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let book of (books$ | async); index as i"
+      (click)="selectBook(book)"
+      [class.table-success]="isBookSelected(book)">
+    <td>{{i + 1}}</td>
+    <td>{{book.authors}}</td>
+    <td>{{book.title}}</td>
+  </tr>
+  </tbody>
+</table>
+<ba-book-details
+  *ngIf="selectedBook"
+  [book]="selectedBook"
+  (bookChange)="updateBook($event)"></ba-book-details>
