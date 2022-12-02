@@ -1,14 +1,14 @@
 {
   "books": [
     {
-      "authors": "Douglas Crockfordddddd",
-      "title": "JavaScript.The Good Parts",
-      "id": 0
+      "id": 0,
+      "authors": "Douglas Crockford",
+      "title": "JavaScript. The Good Parts"
     },
     {
       "id": 1,
-      "authors": "Gang of Four",
-      "title": "Design Patterns"
+      "authors": "Tom Hombergs",
+      "title": "Get Yor Hands Dirty on Clean Architecture"
     },
     {
       "id": 2,
@@ -16,24 +16,9 @@
       "title": "Clean Code"
     },
     {
-      "authors": "test",
-      "title": "trest",
-      "id": 3
-    },
-    {
-      "authors": "Test book",
-      "title": "Test",
-      "id": 4
-    },
-    {
-      "authors": "New Book",
-      "title": "TRest",
-      "id": 5
-    },
-    {
-      "authors": "Douglas Crockford",
-      "title": "dasdddf",
-      "id": 6
+      "id": 3,
+      "authors": "Vinit Nayak",
+      "title": "Copying and Pasting from Stack Overflow"
     }
   ]
 }
