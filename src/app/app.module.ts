@@ -11,6 +11,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {BASE_URL} from "./core/base-url.token";
 import {environment} from "../environments/environment";
 import {JwtTokenInterceptor} from "./core/jwt-token.interceptor";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {JwtTokenInterceptor} from "./core/jwt-token.interceptor";
   ],
   imports: [
     HttpClientModule,
-    RouterModule.forRoot(routes, {enableTracing:true}),
+    ReactiveFormsModule,
+    RouterModule.forRoot(routes),
     CoreModule,
     BrowserModule,
     SharedModule.forRoot(),

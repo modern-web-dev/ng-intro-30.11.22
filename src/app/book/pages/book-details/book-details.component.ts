@@ -3,6 +3,14 @@ import {Book} from '../../model';
 import {BookService} from "../../services/book.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map} from "rxjs";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+
+type BookFormType =
+  {
+    id: FormControl<number>,
+    authors: FormControl<string>,
+    title: FormControl<string>
+  }
 
 @Component({
   selector: 'ba-book-details',
@@ -11,36 +19,49 @@ import {map} from "rxjs";
 })
 export class BookDetailsComponent {
 
+  bookForm = new FormGroup<BookFormType>({
+    id: new FormControl(0, {nonNullable: true}),
+    authors: new FormControl('default authors', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(20)],
+    }),
+    title: new FormControl('default title', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(20)]
+    }),
+  });
+
   book: Book | undefined;
 
-  saved = false;
-  constructor(private  bookService: BookService, private  router: Router, private activatedRoute: ActivatedRoute) {
-   activatedRoute.data.pipe(
+  constructor(private bookService: BookService, private router: Router, private activatedRoute: ActivatedRoute) {
+    activatedRoute.data.pipe(
       map(data => data["book"])
-    ).subscribe((book)=>{
-     this.book= book;
+    ).subscribe((book) => {
+      this.book = book;
+      this.bookForm.setValue({id: book.id, authors: book.authors, title: book.title});
     });
   }
 
-  notifyOnBookChange(event: Event) {
+  resetForm() {
+    this.bookForm.reset();
+  }
+
+  updateBook(event: Event) {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const authorsInput = form?.querySelector?.<HTMLInputElement>('#authors');
-    const titleInput = form?.querySelector?.<HTMLInputElement>('#title');
+
     const changedBook: Book = {
       ...this.book!,
-      authors: authorsInput?.value || '',
-      title: titleInput?.value || ''
+      ...this.bookForm.value
     }
-    this.saved = true;
-    if(this.book?.id){
+    if (this.book?.id) {
       this.bookService.update(changedBook).subscribe();
-    }else{
+    } else {
       this.bookService.add(changedBook)
-        .subscribe((book)=> this.router.navigate(['..', book.id], {relativeTo: this.activatedRoute}));
+        .subscribe((book) => this.router.navigate(['..', book.id], {relativeTo: this.activatedRoute}));
     }
   }
-  isSaved(){
-    return this.saved;
+
+  isSaved() {
+    return this.bookForm.pristine;
   }
 }

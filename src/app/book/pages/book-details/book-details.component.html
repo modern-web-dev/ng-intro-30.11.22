@@ -1,14 +1,25 @@
-<form (submit)="notifyOnBookChange($event)">
-  <div class="alert alert-warning" role="alert" *ngIf="!saved"> Not saved!
+<form (submit)="updateBook($event)" [formGroup]="bookForm">
+  <div class="alert alert-warning" role="alert" *ngIf="bookForm.dirty"> Not saved!
     Not saved!
   </div>
   <div class="mb-3">
     <label for="authors" class="form-label">Authors:</label>
-    <input id="authors" class="form-control" [value]="book?.authors">
+    <input id="authors" class="form-control" formControlName="authors">
   </div>
   <div class="mb-3">
     <label for="title" class="form-label">Title:</label>
-    <input id="title" class="form-control" [value]="book?.title">
+    <input id="title" class="form-control" formControlName="title">
   </div>
-  <button class="btn btn-primary">Save</button>
+  <button class="btn btn-primary" [disabled]="bookForm.invalid || bookForm.pristine">Save</button>
 </form>
+
+<button class="btn btn-secondary" [disabled]="bookForm.untouched" (click)="resetForm()">Reset</button>
+
+<button class="btn btn-secondary" (click)="bookForm.get('title')?.enable()">enable title</button>
+<button class="btn btn-secondary"  (click)="bookForm.get('title')?.disable()">disable title</button>
+
+<div>
+  value: {{bookForm.value | json}}
+<br>
+  rawvalue: {{bookForm.getRawValue() | json}}
+</div>
