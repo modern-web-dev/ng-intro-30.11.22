@@ -4,11 +4,13 @@
   </div>
   <div class="mb-3">
     <label for="authors" class="form-label">Authors:</label>
-    <input id="authors" class="form-control" formControlName="authors">
+    <input id="authors" class="form-control"  formControlName="authors">
+    <ba-validation-error  [control]="bookForm.get('authors')"></ba-validation-error>
   </div>
   <div class="mb-3">
     <label for="title" class="form-label">Title:</label>
     <input id="title" class="form-control" formControlName="title">
+    <ba-validation-error [control]="bookForm.get('title')"></ba-validation-error>
   </div>
   <button class="btn btn-primary" [disabled]="bookForm.invalid || bookForm.pristine">Save</button>
 </form>

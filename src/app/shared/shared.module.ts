@@ -2,15 +2,16 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
-import {CoreModule} from "../core/core.module";
+import { ValidationErrorComponent } from './validation-error/validation-error.component';
 
 @NgModule({
-  declarations: [],
-  exports: [
-    CommonModule, RouterModule, ReactiveFormsModule
+  declarations: [
+    ValidationErrorComponent
   ],
+    exports: [
+        CommonModule, RouterModule, ReactiveFormsModule, ValidationErrorComponent
+    ],
   imports: [
-    CoreModule,
     CommonModule,
   ]
 })

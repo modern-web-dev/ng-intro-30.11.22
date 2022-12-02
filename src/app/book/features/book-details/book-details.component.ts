@@ -1,10 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Book} from '../../model';
 import {BookService} from "../../services/book.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {map} from "rxjs";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 
+function mojMaxLength(maxVal:number):ValidatorFn {
+  return function (control: AbstractControl): ValidationErrors | null {
+    return control.value.length > maxVal ? {mojMaxLength10: true} : null;
+  }
+}
 type BookFormType =
   {
     id: FormControl<number>,
@@ -17,13 +22,13 @@ type BookFormType =
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.scss']
 })
-export class BookDetailsComponent {
+export class BookDetailsComponent implements OnInit {
 
   bookForm = new FormGroup<BookFormType>({
     id: new FormControl(0, {nonNullable: true}),
     authors: new FormControl('default authors', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(20)],
+      validators: [Validators.required, mojMaxLength(12) ],
     }),
     title: new FormControl('default title', {
       nonNullable: true,
@@ -40,6 +45,11 @@ export class BookDetailsComponent {
       this.book = book;
       this.bookForm.setValue({id: book.id, authors: book.authors, title: book.title});
     });
+  }
+
+  ngOnInit() {
+    // this.bookForm.valueChanges.subscribe(console.log);
+    this.bookForm.statusChanges.subscribe(console.log);
   }
 
   resetForm() {

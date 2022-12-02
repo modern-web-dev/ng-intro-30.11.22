@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
-import {BookModule} from './book/book.module';
 import {SharedModule} from './shared/shared.module';
 import {CoreModule} from "./core/core.module";
 import {RouterModule} from "@angular/router";
@@ -24,7 +23,6 @@ import {ReactiveFormsModule} from "@angular/forms";
     CoreModule,
     BrowserModule,
     SharedModule.forRoot(),
-    BookModule.forRoot(),
   ],
   providers:[
     {provide: BASE_URL, useValue: environment.BASE_API},

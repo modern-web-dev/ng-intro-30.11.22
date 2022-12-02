@@ -1,0 +1,9 @@
+
+@import "bootstrap/scss/bootstrap";
+:host {
+  display: block;
+  .ng-invalid {
+    @extend .is-invalid;
+  }
+
+}

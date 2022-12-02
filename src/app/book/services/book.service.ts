@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Inject, Injectable} from "@angular/core";
 import {BASE_URL} from "../../core/base-url.token";
 
-@Injectable()
+@Injectable({providedIn:'root'})
 export class BookService {
   constructor(private httpClient:HttpClient,  @Inject(BASE_URL) private contextUrl:string) {
   }
