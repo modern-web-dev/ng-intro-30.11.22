@@ -30,7 +30,7 @@ fdescribe('BookService', () => {
   it('should receive not found error', () => {
 
     bookService.findById(1).subscribe({
-      error: ()=> {}
+      error: console.log
     });
 
     httpTestingController.expectOne("/api/books/1").flush(null, {status: 404, statusText:'Not Found'})
