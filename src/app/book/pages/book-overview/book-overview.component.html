@@ -1,0 +1,27 @@
+<table class="table table-striped table-primary align-self-start me-3">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Authors</th>
+    <th>Title</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngIf="booksLength$ | async as booksLength; else  noBooks">
+    <tr routerLink="/book/{{book.id}}"
+         *ngFor="let book of (books$ | async); index as i">
+      <td>{{i + 1}} / {{booksLength}}</td>
+      <td> {{book.authors}}</td>
+      <td>{{book.title}}</td>
+    </tr>
+  </ng-container>
+  </tbody>
+</table>
+
+<ng-template #noBooks>
+  <tr>
+    <td colspan="3">
+      No records
+    </td>
+  </tr>
+</ng-template>

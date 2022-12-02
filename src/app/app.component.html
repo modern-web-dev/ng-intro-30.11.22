@@ -1,3 +1,9 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="books-list">Navbar</a>
+    <a class="nav-link" routerLinkActive="active" routerLink="/book/new">Add new book</a>
+  </div>
+</nav>
 <main class="container mt-2">
-  <ba-book-overview></ba-book-overview>
+  <router-outlet></router-outlet>
 </main>

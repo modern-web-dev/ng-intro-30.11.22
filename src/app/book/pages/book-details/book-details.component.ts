@@ -1,18 +1,26 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component} from '@angular/core';
 import {Book} from '../../model';
+import {BookService} from "../../services/book.service";
+import {ActivatedRoute} from "@angular/router";
+import {map} from "rxjs";
 
 @Component({
   selector: 'ba-book-details',
   templateUrl: './book-details.component.html',
-  styleUrls: ['./book-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./book-details.component.scss']
 })
 export class BookDetailsComponent {
-  @Input()
+
   book: Book | undefined;
 
-  @Output()
-  bookChange = new EventEmitter<Book>();
+  saved = false;
+  constructor(bookService: BookService, activatedRoute: ActivatedRoute) {
+   activatedRoute.data.pipe(
+      map(data => data["book"])
+    ).subscribe((book)=>{
+     this.book= book;
+    });
+  }
 
   notifyOnBookChange(event: Event) {
     event.preventDefault();
@@ -24,6 +32,10 @@ export class BookDetailsComponent {
       authors: authorsInput?.value || '',
       title: titleInput?.value || ''
     }
-    this.bookChange.emit(changedBook);
+    this.saved = true;
+    console.log(changedBook);
+  }
+  isSaved(){
+    return this.saved;
   }
 }

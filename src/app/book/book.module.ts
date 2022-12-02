@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {BookDetailsComponent} from './components/book-details/book-details.component';
-import {BookOverviewComponent} from './components/book-overview/book-overview.component';
+import {BookDetailsComponent} from './pages/book-details/book-details.component';
+import {BookOverviewComponent} from './pages/book-overview/book-overview.component';
 import {BookService} from './services/book.service';
 import {SharedModule} from '../shared/shared.module';
 
