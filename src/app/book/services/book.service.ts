@@ -1,60 +1,25 @@
 import {Book} from '../model';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Observable} from 'rxjs';
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class BookService {
-  private booksSubject = new BehaviorSubject<Book[]>([
-    {
-      id: 0,
-      authors: 'Douglas Crockford',
-      title: 'JavaScript. The Good Parts'
-    },
-    {
-      id: 1,
-      authors: 'Tom Hombergs',
-      title: 'Get Yor Hands Dirty on Clean Architecture'
-    },
-    {
-      id: 2,
-      authors: 'Robert C. Martin',
-      title: 'Clean Code'
-    },
-    {
-      id: 3,
-      authors: 'Vinit Nayak',
-      title: 'Copying and Pasting from Stack Overflow'
-    }
-  ]);
-  private books$ = this.booksSubject.asObservable();
+  constructor(private httpClient:HttpClient) {
+  }
 
   findAll(): Observable<Book[]> {
-    return this.books$;
+    return this.httpClient.get<Book[]>('/api/books');
   }
 
   update(book: Book): Observable<Book> {
-    return new Observable<Book>(subscriber => {
-      setTimeout(() => {
-        const changedBookCopy = {...book};
-        const currentBooks = this.booksSubject.value;
-        const newBooks = currentBooks.map(currentBook => currentBook.id === book.id ? changedBookCopy : currentBook);
-        this.booksSubject.next(newBooks);
-        subscriber.next(changedBookCopy);
-        subscriber.complete();
-      }, 1000);
-    });
+    return this.httpClient.put<Book>(`/api/books/${book.id}`, book);
+  }
+  add(book: Book): Observable<Book> {
+    return this.httpClient.post<Book>(`/api/books`, book);
   }
 
   findById(bookId: number): Observable<Book> {
-    return new Observable<Book>(subscriber => {
-      setTimeout(() => {
-        const currentBooks = this.booksSubject.value;
-        const book = currentBooks.find(book => book.id === bookId);
-        if (book) {
-          subscriber.next(book);
-          subscriber.complete();
-        } else {
-          subscriber.error(new Error(`Book with ID ${bookId} could not be found!`));
-        }
-      }, 1000);
-    })
+    return this.httpClient.get<Book>(`/api/books/${bookId}`);
   }
 }

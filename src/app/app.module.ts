@@ -7,12 +7,14 @@ import {SharedModule} from './shared/shared.module';
 import {CoreModule} from "./core/core.module";
 import {RouterModule} from "@angular/router";
 import {routes} from "./app.routing";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    HttpClientModule,
     RouterModule.forRoot(routes, {enableTracing:true}),
     CoreModule,
     BrowserModule,

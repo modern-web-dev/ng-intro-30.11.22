@@ -1,24 +1,39 @@
 {
   "books": [
     {
-      "author": "Douglas Crockfordddddd",
+      "authors": "Douglas Crockfordddddd",
       "title": "JavaScript.The Good Parts",
       "id": 0
     },
     {
       "id": 1,
-      "author": "Gang of Four",
+      "authors": "Gang of Four",
       "title": "Design Patterns"
     },
     {
       "id": 2,
-      "author": "Robert C. Martin",
+      "authors": "Robert C. Martin",
       "title": "Clean Code"
     },
     {
-      "author": "test",
+      "authors": "test",
       "title": "trest",
       "id": 3
+    },
+    {
+      "authors": "Test book",
+      "title": "Test",
+      "id": 4
+    },
+    {
+      "authors": "New Book",
+      "title": "TRest",
+      "id": 5
+    },
+    {
+      "authors": "Douglas Crockford",
+      "title": "dasdddf",
+      "id": 6
     }
   ]
 }

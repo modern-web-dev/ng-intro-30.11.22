@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Book} from '../../model';
 import {BookService} from "../../services/book.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {map} from "rxjs";
 
 @Component({
@@ -14,7 +14,7 @@ export class BookDetailsComponent {
   book: Book | undefined;
 
   saved = false;
-  constructor(bookService: BookService, activatedRoute: ActivatedRoute) {
+  constructor(private  bookService: BookService, private  router: Router, private activatedRoute: ActivatedRoute) {
    activatedRoute.data.pipe(
       map(data => data["book"])
     ).subscribe((book)=>{
@@ -33,7 +33,12 @@ export class BookDetailsComponent {
       title: titleInput?.value || ''
     }
     this.saved = true;
-    console.log(changedBook);
+    if(this.book?.id){
+      this.bookService.update(changedBook).subscribe();
+    }else{
+      this.bookService.add(changedBook)
+        .subscribe((book)=> this.router.navigate(['..', book.id], {relativeTo: this.activatedRoute}));
+    }
   }
   isSaved(){
     return this.saved;
